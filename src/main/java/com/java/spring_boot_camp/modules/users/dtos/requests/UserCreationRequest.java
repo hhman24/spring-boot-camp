@@ -1,9 +1,15 @@
 package com.java.spring_boot_camp.modules.users.dtos.requests;
 
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.Size;
+
 import java.time.LocalDate;
 
 public class UserCreationRequest {
     private String username;
+
+    @Size(min = 8, message = "password must be 9")
+    @NotEmpty()
     private String password;
     private String firstName;
     private String lastName;
