@@ -1,5 +1,6 @@
 package com.java.spring_boot_camp.modules.users.controllers;
 
+import com.java.spring_boot_camp.common.dtos.ApiResponse;
 import com.java.spring_boot_camp.modules.users.dtos.requests.UserCreationRequest;
 import com.java.spring_boot_camp.modules.users.dtos.requests.UserUpdateRequest;
 import com.java.spring_boot_camp.modules.users.entities.User;
@@ -17,8 +18,12 @@ public class UserController {
     private UserService userService;
 
     @PostMapping()
-    User createUser(@RequestBody @Valid UserCreationRequest request) {
-        return userService.createRequest(request);
+    ApiResponse<User> createUser(@RequestBody @Valid UserCreationRequest request) {
+        ApiResponse<User> res = new ApiResponse<>();
+
+        res.setData(userService.createRequest(request));
+
+        return res;
     }
 
     @GetMapping()
