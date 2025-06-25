@@ -21,6 +21,9 @@ public class UserService {
             throw new RuntimeException("User exists");
         }
 
+        // common pattern --> clean code
+//        UserCreationRequest request1 = UserCreationRequest.builder().username("an").build();
+
         user.setFirstName(request.getFirstName());
 
         return userRepository.save(user);

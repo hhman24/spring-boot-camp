@@ -2,56 +2,25 @@ package com.java.spring_boot_camp.modules.users.dtos.requests;
 
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
+import lombok.*;
+import lombok.experimental.FieldDefaults;
+
 
 import java.time.LocalDate;
 
+@Data
+@Builder
+@NoArgsConstructor // override constructor
+@AllArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class UserCreationRequest {
-    private String username;
+    String username;
 
-    @Size(min = 8, message = "password must be 9")
+    @Size(min = 8, message = "BAD_REQUEST")
     @NotEmpty()
-    private String password;
-    private String firstName;
-    private String lastName;
-    private LocalDate dob;
+    String password;
+    String firstName;
+    String lastName;
+    LocalDate dob;
 
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public String getFirstName() {
-        return firstName;
-    }
-
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
-
-    public LocalDate getDob() {
-        return dob;
-    }
-
-    public void setDob(LocalDate dob) {
-        this.dob = dob;
-    }
 }
