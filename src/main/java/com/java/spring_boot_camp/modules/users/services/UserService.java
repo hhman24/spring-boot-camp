@@ -2,20 +2,26 @@ package com.java.spring_boot_camp.modules.users.services;
 
 import com.java.spring_boot_camp.modules.users.dtos.requests.UserCreationRequest;
 import com.java.spring_boot_camp.modules.users.dtos.requests.UserUpdateRequest;
+import com.java.spring_boot_camp.modules.users.dtos.responses.UserResponse;
 import com.java.spring_boot_camp.modules.users.entities.User;
+import com.java.spring_boot_camp.modules.users.mapper.UserMapper;
 import com.java.spring_boot_camp.modules.users.repositories.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AccessLevel;
+import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor // inject container and constructor
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class UserService {
-    @Autowired
-    private UserRepository userRepository;
+    UserRepository userRepository;
+    UserMapper userMapper;
 
     public User createRequest(UserCreationRequest request) {
-        User user = new User();
+//        User user = new User();
 
         if (userRepository.existsByUsername(request.getUsername())) {
             throw new RuntimeException("User exists");
@@ -24,7 +30,7 @@ public class UserService {
         // common pattern --> clean code
 //        UserCreationRequest request1 = UserCreationRequest.builder().username("an").build();
 
-        user.setFirstName(request.getFirstName());
+        User user = userMapper.toUser(request);
 
         return userRepository.save(user);
     }
@@ -33,12 +39,12 @@ public class UserService {
         return userRepository.findAll();
     }
 
-    public User getUserById(String id) {
-        return userRepository.findById(id).orElseThrow(() -> new RuntimeException("User not found"));
+    public UserResponse getUserById(String id) {
+        return userMapper.toUserResponse(userRepository.findById(id).orElseThrow(() -> new RuntimeException("User not found")));
     }
 
     public User updateUserById(String id, UserUpdateRequest request) {
-        User user = getUserById(id);
+        User user = userRepository.findById(id).orElseThrow(() -> new RuntimeException("User not found"));
 
         user.setFirstName(request.getFirstName());
 

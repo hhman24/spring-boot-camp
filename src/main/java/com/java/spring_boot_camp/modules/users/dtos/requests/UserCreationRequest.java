@@ -14,10 +14,10 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class UserCreationRequest {
+    @NotEmpty(message = "BAD_REQUEST")
     String username;
 
     @Size(min = 8, message = "BAD_REQUEST")
-    @NotEmpty()
     String password;
     String firstName;
     String lastName;
