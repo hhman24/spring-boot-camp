@@ -1,5 +1,8 @@
 package com.java.spring_boot_camp.common.enums;
 
+import lombok.Getter;
+
+@Getter()
 public enum ErrorCode {
 
     BAD_REQUEST(4003, "bad_request"),
@@ -12,13 +15,5 @@ public enum ErrorCode {
     ErrorCode(int code, String message) {
         this.code = code;
         this.message = message;
-    }
-
-    public String getMessage() {
-        return message;
-    }
-
-    public int getCode() {
-        return code;
     }
 }

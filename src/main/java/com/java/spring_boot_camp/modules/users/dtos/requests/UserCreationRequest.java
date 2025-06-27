@@ -1,6 +1,7 @@
 package com.java.spring_boot_camp.modules.users.dtos.requests;
 
 import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -17,6 +18,7 @@ public class UserCreationRequest {
     @NotEmpty(message = "BAD_REQUEST")
     String username;
 
+    @NotNull(message = "BAD_REQUEST")
     @Size(min = 8, message = "BAD_REQUEST")
     String password;
     String firstName;
