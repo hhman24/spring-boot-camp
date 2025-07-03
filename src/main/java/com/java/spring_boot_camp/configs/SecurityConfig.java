@@ -7,6 +7,8 @@ import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.jose.jws.MacAlgorithm;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
@@ -32,11 +34,13 @@ public class SecurityConfig {
 //                .authorizeHttpRequests(authorize -> authorize
 //                        .anyRequest().authenticated()
 //                );
-        http.authorizeHttpRequests(request ->
-                request.requestMatchers(HttpMethod.POST, this.PUBLIC_ENDPOINT).permitAll().anyRequest().authenticated());
+        http.authorizeHttpRequests(request -> request
+                .requestMatchers(HttpMethod.POST, this.PUBLIC_ENDPOINT).permitAll()
+//                .requestMatchers(HttpMethod.GET, "/users/**").permitAll()
+                .anyRequest().authenticated());
 
-        http.oauth2ResourceServer(oauth2 ->
-                oauth2.jwt(jwtConfigurer -> jwtConfigurer.decoder(this.jwtDecoder())));
+        http.oauth2ResourceServer(oauth2 -> oauth2
+                .jwt(jwtConfigurer -> jwtConfigurer.decoder(this.jwtDecoder())));
 
         http.csrf(AbstractHttpConfigurer::disable);
 
@@ -49,5 +53,10 @@ public class SecurityConfig {
         SecretKeySpec secretKeySpec = new SecretKeySpec(this.SIGNER_KEY.getBytes(), "HS512");
 
         return NimbusJwtDecoder.withSecretKey(secretKeySpec).macAlgorithm(MacAlgorithm.HS512).build();
+    }
+
+    @Bean
+    PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder(10);
     }
 }

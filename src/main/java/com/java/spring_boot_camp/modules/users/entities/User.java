@@ -4,13 +4,18 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
+import java.util.Set;
 
-@Data()
+@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 public class User {
     @Id
@@ -26,4 +31,6 @@ public class User {
     private String lastName;
 
     private LocalDate dob;
+
+    private Set<String> roles;
 }

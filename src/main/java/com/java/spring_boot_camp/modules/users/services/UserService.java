@@ -1,6 +1,7 @@
 package com.java.spring_boot_camp.modules.users.services;
 
 import com.java.spring_boot_camp.common.enums.ErrorCode;
+import com.java.spring_boot_camp.common.enums.Role;
 import com.java.spring_boot_camp.common.exceptions.AppException;
 import com.java.spring_boot_camp.modules.users.dtos.requests.UserCreationRequest;
 import com.java.spring_boot_camp.modules.users.dtos.requests.UserUpdateRequest;
@@ -15,7 +16,9 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Service
 @RequiredArgsConstructor // inject container and constructor
@@ -33,11 +36,14 @@ public class UserService {
 
         // common pattern --> clean code
         // UserCreationRequest request1 = UserCreationRequest.builder().username("an").build();
+        Set<String> roles = new HashSet<>();
+        roles.add(Role.USER.name());
 
         User user = userMapper.toUser(request);
         PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(10);
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
 
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        user.setRoles(roles);
 
         return userRepository.save(user);
     }
