@@ -4,32 +4,32 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import lombok.*;
-import lombok.experimental.FieldDefaults;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
-import java.util.Set;
 
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@FieldDefaults(level = AccessLevel.PRIVATE)
 @Entity
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    String id;
+    private String id;
 
-    String username;
+    private String username;
 
-    String password;
+    private String password;
 
-    String firstName;
+    private String firstName;
 
-    String lastName;
+    private String lastName;
 
-    LocalDate dob;
+    private LocalDate dob;
 
-    Set<String> roles;
+    private Set<String> roles;
 }
