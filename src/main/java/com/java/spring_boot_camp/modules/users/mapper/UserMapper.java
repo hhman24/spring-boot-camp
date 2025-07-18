@@ -5,7 +5,6 @@ import com.java.spring_boot_camp.modules.users.dtos.requests.UserUpdateRequest;
 import com.java.spring_boot_camp.modules.users.dtos.responses.UserResponse;
 import com.java.spring_boot_camp.modules.users.entities.User;
 import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 
 @Mapper(componentModel = "spring")

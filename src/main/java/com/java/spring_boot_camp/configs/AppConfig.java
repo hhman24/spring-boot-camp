@@ -29,10 +29,10 @@ public class AppConfig {
                 var roles = new HashSet<String>();
                 roles.add(Role.ADMIN.name());
 
-//                String rawPassword = "AdMin@2024!";
+                String rawPassword = "AdMin@2024!";
                 User user = User.builder()
                         .username("admin")
-//                        .password(this.passwordEncoder.encode(rawPassword))
+                        .password(this.passwordEncoder.encode(rawPassword))
                         .roles(roles)
                         .build();
 
