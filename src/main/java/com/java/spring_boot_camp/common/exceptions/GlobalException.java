@@ -3,6 +3,7 @@ package com.java.spring_boot_camp.common.exceptions;
 import com.java.spring_boot_camp.common.dtos.ApiResponse;
 import com.java.spring_boot_camp.common.enums.ErrorCode;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -37,8 +38,24 @@ public class GlobalException {
         res.setCode(exception.getErrorCode().getCode());
         res.setMessage(exception.getErrorCode().getMessage());
 
-        return ResponseEntity.badRequest().body(res);
+        return ResponseEntity
+                .status(exception.getErrorCode().getStatus())
+                .body(res);
     }
+
+    @ExceptionHandler(value = AccessDeniedException.class)
+    ResponseEntity<ApiResponse> handlingAccessDeniedException(AccessDeniedException exception) {
+        ErrorCode errorCode = ErrorCode.UNAUTHORIZED;
+        ApiResponse res = new ApiResponse();
+
+        res.setCode(errorCode.getCode());
+        res.setMessage(errorCode.getMessage());
+
+        return ResponseEntity
+                .status(errorCode.getStatus())
+                .body(res);
+    }
+
 
     @ExceptionHandler(value = MethodArgumentNotValidException.class)
     ResponseEntity<ApiResponse> handlingValidation(MethodArgumentNotValidException exception) {
@@ -57,6 +74,6 @@ public class GlobalException {
         res.setCode(errorCode.getCode());
         res.setMessage(errorCode.getMessage());
 
-        return  ResponseEntity.badRequest().body(res);
+        return ResponseEntity.badRequest().body(res);
     }
 }

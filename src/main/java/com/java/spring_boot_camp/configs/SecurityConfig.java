@@ -46,11 +46,12 @@ public class SecurityConfig {
 //                    .hasRole(Role.ADMIN.name())
                 .anyRequest().authenticated());
 
-        http.oauth2ResourceServer(oauth2 -> oauth2
-                .jwt(jwtConfigurer ->
+        http.oauth2ResourceServer(oauth2 ->
+                oauth2.jwt(jwtConfigurer ->
                         jwtConfigurer.decoder(this.jwtDecoder())
-                                .jwtAuthenticationConverter(jwtAuthenticationConverter())
-                ));
+                                .jwtAuthenticationConverter(jwtAuthenticationConverter()))
+                        .authenticationEntryPoint()
+        );
 
         http.csrf(AbstractHttpConfigurer::disable);
 
