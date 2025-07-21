@@ -2,12 +2,12 @@ package com.java.spring_boot_camp.modules.users.services;
 
 import com.java.spring_boot_camp.common.enums.ErrorCode;
 import com.java.spring_boot_camp.common.enums.Role;
-import com.java.spring_boot_camp.common.exceptions.AppException;
 import com.java.spring_boot_camp.modules.users.dtos.requests.UserCreationRequest;
 import com.java.spring_boot_camp.modules.users.dtos.requests.UserUpdateRequest;
 import com.java.spring_boot_camp.modules.users.dtos.responses.UserResponse;
 import com.java.spring_boot_camp.modules.users.entities.User;
 import com.java.spring_boot_camp.modules.users.mapper.UserMapper;
+import com.java.spring_boot_camp.modules.users.repositories.RoleRepository;
 import com.java.spring_boot_camp.modules.users.repositories.UserRepository;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -20,6 +20,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -31,6 +32,7 @@ import java.util.Set;
 public class UserService {
     UserRepository userRepository;
     UserMapper userMapper;
+    RoleRepository roleRepository;
 
     public UserResponse createRequest(UserCreationRequest request) {
         if (userRepository.existsByUsername(request.getUsername())) {
@@ -39,14 +41,13 @@ public class UserService {
 
         // common pattern --> clean code
         // UserCreationRequest request1 = UserCreationRequest.builder().username("an").build();
-        Set<String> roles = new HashSet<>();
-        roles.add(Role.USER.name());
+//        var roles = this.roleRepository.findAllById(List.of(Role.USER.name()));
 
         User user = userMapper.toUser(request);
         PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(10);
 
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-        user.setRoles(roles);
+//        user.setRoles(new HashSet<>(roles));
 
         return userMapper.toUserResponse(userRepository.save(user));
     }
@@ -55,6 +56,7 @@ public class UserService {
         userRepository.deleteById(userId);
     }
 
+    // List<GrantedAuthority> = ["SCOPE_ADMIN", "SCOPE_APPROVE_POST"]
     @PreAuthorize("hasRole('ADMIN')")
     public List<UserResponse> getUsers() {
         log.info("In method get Users");
@@ -83,7 +85,10 @@ public class UserService {
 
         userMapper.updateUser(user, request);
 
-        return userMapper.toUserResponse(user);
+        var roles = this.roleRepository.findAllById(request.getRoles());
+        user.setRoles(new HashSet<>(roles));
+
+        return userMapper.toUserResponse(this.userRepository.save(user));
     }
 
     public User getUserByUsernamePassword(String userName) {

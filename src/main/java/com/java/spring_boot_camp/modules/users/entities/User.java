@@ -1,18 +1,13 @@
 package com.java.spring_boot_camp.modules.users.entities;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import jakarta.persistence.*;
+import lombok.*;
 
 import java.time.LocalDate;
 import java.util.Set;
 
-@Data
+@Getter
+@Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
@@ -32,5 +27,6 @@ public class User {
 
     private LocalDate dob;
 
-    private Set<String> roles;
+    @ManyToMany
+    private Set<Role> roles;
 }

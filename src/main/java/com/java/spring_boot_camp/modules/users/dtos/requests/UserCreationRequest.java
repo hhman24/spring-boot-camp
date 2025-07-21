@@ -1,5 +1,6 @@
 package com.java.spring_boot_camp.modules.users.dtos.requests;
 
+import com.java.spring_boot_camp.modules.users.validator.DobConstraint;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -23,6 +24,7 @@ public class UserCreationRequest {
     String password;
     String firstName;
     String lastName;
-    LocalDate dob;
 
+    @DobConstraint(min = 18, message = "BAD_REQUEST")
+    LocalDate dob;
 }
